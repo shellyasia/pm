@@ -11,6 +11,5 @@ export async function GET() {
     optionsStatus,
     oauthServer: config.OAUTH_SERVER,
     confluenceBaseURL: config.CONFLUENCE_BASE_URL,
-    registerURL: config.REGISTER_URL,
   });
 }
