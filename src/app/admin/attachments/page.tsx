@@ -243,14 +243,10 @@ export default function AttachmentsPage() {
         if (!value) return "N/A";
         const date = new Date(String(value));
         return (
-          <div className="space-y-1">
-            <div className="flex items-center gap-1.5 text-sm font-medium">
-              <Calendar className="h-3.5 w-3.5 text-blue-500" />
-              <span>{date.toLocaleDateString()}</span>
-            </div>
-            <div className="flex items-center gap-1.5 text-xs text-muted-foreground ml-5">
-              <Clock className="h-3 w-3" />
-              <span>{date.toLocaleTimeString()}</span>
+          <div className="text-sm">
+            <div>{date.toLocaleDateString()}</div>
+            <div className="text-xs text-muted-foreground">
+              {date.toLocaleTimeString()}
             </div>
           </div>
         );
