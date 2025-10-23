@@ -65,7 +65,7 @@ export default function LoginPage() {
             <p className="text-sm text-gray-600">
               Don&apos;t have an account?{" "}
               <a
-                href={`https://${meta?.oauthServer}/#/Signup`}
+                href={`${meta?.registerURL}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="font-medium text-blue-600 hover:text-blue-500"

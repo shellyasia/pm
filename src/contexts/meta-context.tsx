@@ -8,6 +8,7 @@ interface MetaData {
     optionsTag: string[];
     optionsStatus: string[];
     oauthServer: string;
+    registerURL: string;
     confluenceBaseURL: string;
 }
 
