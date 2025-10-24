@@ -11,6 +11,7 @@ export interface Database {
   orders: import("./table_order").OrderTable;
   attachments: import("./table_attachment").AttachmentTable;
   oauth_states: import("./table_ouath_state").OauthStateTable;
+  hn_items: import("./table_hn").HnItemTable;
 }
 
 function createPgConnectionClient(): Kysely<Database> {

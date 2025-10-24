@@ -6,14 +6,14 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("id", "varchar", (col) => col.primaryKey().defaultTo(""))
     .addColumn("product_code", "varchar", (col) => col.notNull().defaultTo("")) //index to products.id
     .addColumn("factory", "varchar", (col) => col.notNull().defaultTo("normal")) //OrderFactory index
-    .addColumn(
-      "priority",
-      "varchar",
-      (col) => col.notNull().defaultTo("normal"),
-    ) //OrderPriority
+    .addColumn("priority","varchar",(col) => col.notNull().defaultTo("normal"),) //OrderPriority
     .addColumn("quantity", "integer", (col) => col.notNull().defaultTo(0))
     .addColumn("batch", "varchar", (col) => col.notNull().defaultTo("")) //index
     .addColumn("comments", "jsonb", (col) => col.notNull().defaultTo("[]")) //array of {email, content, timestamp, action}
+    .addColumn("status", "varchar", (col) => col.notNull().defaultTo("draft"))
+    .addColumn("remark", "text", (col) => col.notNull().defaultTo(""))
+    .addColumn("name", "varchar", (col) => col.notNull().defaultTo(""))
+
     .addColumn(
       "created_at",
       "timestamp",
@@ -49,6 +49,17 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .createIndex("idx_orders_batch")
     .on("orders")
     .column("batch")
+    .execute();
+
+  await db.schema
+    .createIndex("idx_orders_name")
+    .on("orders")
+    .column("name")
+    .execute();
+  await db.schema
+    .createIndex("idx_orders_status")
+    .on("orders")
+    .column("status")
     .execute();
 }
 
