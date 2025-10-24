@@ -10,7 +10,8 @@ import {
   Upload,
   Shield,
   Database,
-  Zap
+  Zap,
+  Newspaper
 } from "lucide-react";
 import Link from "next/link";
 
@@ -77,6 +78,13 @@ export default function Home() {
             description="Import and export order data seamlessly with XLSX support, bulk operations, and automated data validation."
             icon={<Upload className="h-6 w-6 text-primary" />}
             href="/admin/orders"
+          />
+
+          <HeroFeature
+            title="Hacker News"
+            description="Browse and sync the latest tech news and stories from Hacker News with real-time updates and search."
+            icon={<Newspaper className="h-6 w-6 text-primary" />}
+            href="/hackernews"
           />
         </HeroFeatureGrid>
 

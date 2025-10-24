@@ -13,6 +13,7 @@ import {
   TrendingUp,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
 } from "lucide-react";
 
 interface HnItem {
@@ -31,6 +32,7 @@ export function HackerNewsContent() {
   const [search, setSearch] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const limit = 40;
 
   useEffect(() => {
@@ -70,6 +72,23 @@ export function HackerNewsContent() {
     }
   };
 
+  const handleSync = async () => {
+    setSyncing(true);
+    try {
+      const response = await fetch("/api/hackernews?action=sync");
+      const data = await response.json();
+      console.log("Sync completed:", data);
+      // Refresh the list after sync
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to sync:", error);
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const totalPages = Math.ceil(total / limit);
 
   const getTimeSince = (date: string) => {
@@ -99,7 +118,7 @@ export function HackerNewsContent() {
 
   return (
     <div className="space-y-6">
- 
+
 
       {/* Stories List */}
       {loading ? (
@@ -295,6 +314,15 @@ export function HackerNewsContent() {
             className="h-12 px-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white shadow-lg shadow-orange-500/30"
           >
             Search
+          </Button>
+                    <Button
+            onClick={handleSync}
+            disabled={syncing}
+            variant="outline"
+            className="h-12 px-8 gap-2 border-orange-300 text-orange-600 hover:bg-orange-50"
+          >
+            <RefreshCw className={`h-4 w-4 ${syncing ? 'animate-spin' : ''}`} />
+            {syncing ? 'Syncing...' : 'Sync from HN'}
           </Button>
         </div>
 
