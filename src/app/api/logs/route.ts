@@ -1,24 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
-import { verifyToken } from "@/lib/auth/jwt";
+import { AuthenticatedRequest, withAdminOnly, withShellyCompany } from "@/lib/auth/middleware";
 
 // Mark this route as dynamic since it uses cookies for authentication
 export const dynamic = 'force-dynamic';
 
-export async function GET(request: NextRequest) {
+export const GET = withShellyCompany(withAdminOnly(async (_request: AuthenticatedRequest) => {
   try {
-    // Verify admin authentication
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const payload = verifyToken(token);
-    if (!payload || payload.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     // Read log directory
     const logsDir = path.join(process.cwd(), "logs");
     
@@ -59,4 +48,4 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
-}
+}));

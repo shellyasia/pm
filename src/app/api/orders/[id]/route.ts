@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole, withShellyCompany } from "@/lib/auth/middleware";
 import { orderFirst, OrderUpdate, orderUpdate, orderDelete } from "@/lib/db/table_order";
 
 interface RouteParams {
@@ -9,7 +9,7 @@ interface RouteParams {
 }
 
 // GET /api/orders/[id] - Get specific order
-export const GET = withAnyRole(async (
+export const GET = withShellyCompany(withAnyRole(async (
   request: AuthenticatedRequest,
   { params }: RouteParams,
 ) => {
@@ -23,10 +23,10 @@ export const GET = withAnyRole(async (
       { status: 404 },
     );
   }
-});
+}));
 
 // PUT /api/orders/[id] - Update specific order
-export const PUT = withEditorOrAdmin(async (
+export const PUT = withShellyCompany(withEditorOrAdmin(async (
   req: AuthenticatedRequest,
   { params }: RouteParams,
 ) => {
@@ -57,10 +57,10 @@ export const PUT = withEditorOrAdmin(async (
       { status: 500 },
     );
   }
-});
+}));
 
 // DELETE /api/orders/[id] - Delete specific order
-export const DELETE = withEditorOrAdmin(async (
+export const DELETE = withShellyCompany(withEditorOrAdmin(async (
   request: AuthenticatedRequest,
   { params }: RouteParams,
 ) => {
@@ -85,4 +85,4 @@ export const DELETE = withEditorOrAdmin(async (
       { status: 500 },
     );
   }
-});
+}));

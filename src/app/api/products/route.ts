@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole, withShellyCompany } from "@/lib/auth/middleware";
 import {
   dbProductAll,
   dbProductInsert,
@@ -7,7 +7,7 @@ import {
 } from "@/lib/db/table_product";
 
 // GET /api/products - List products with pagination and search
-export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
+export const GET = withShellyCompany(withAnyRole(async (request: AuthenticatedRequest) => {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "100");
@@ -26,10 +26,10 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
     total,
     rows,
   });
-});
+}));
 
 // POST /api/products - Create new product
-export const POST = withEditorOrAdmin(async (req: AuthenticatedRequest) => {
+export const POST = withShellyCompany(withEditorOrAdmin(async (req: AuthenticatedRequest) => {
   try {
     const body = await req.json();
 
@@ -49,4 +49,4 @@ export const POST = withEditorOrAdmin(async (req: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));

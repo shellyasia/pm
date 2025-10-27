@@ -16,9 +16,6 @@ export const withAuth = <T extends unknown[]>(
     try {
       const token = req.cookies.get("token")?.value || "";
       const user = verifyToken(token);
-      if (user.company.toLowerCase() === "null") {
-        throw new Error("User company is not set,Ask the website admin to set the write access");
-      }
       // Add user to request object
       const authenticatedReq = req as AuthenticatedRequest;
       authenticatedReq.user = user;
@@ -87,4 +84,22 @@ export const withAnyRole = <T extends unknown[]>(
   handler: (req: AuthenticatedRequest, ...args: T) => Promise<NextResponse>,
 ) => {
   return withRoles(["viewer", "editor", "admin"], handler);
+};
+
+/**
+ * Shelly company middleware - allows access only for users with company === 'shelly'
+ */
+export const withShellyCompany = <T extends unknown[]>(
+  handler: (req: AuthenticatedRequest, ...args: T) => Promise<NextResponse>,
+) => {
+  return withAuth(async (req: AuthenticatedRequest, ...args: T) => {
+    const user = req.user!;
+    if (user.company.toLowerCase() !== "shelly") {
+      return NextResponse.json(
+        { error: "Access restricted to Shelly company only" },
+        { status: 403 },
+      );
+    }
+    return handler(req, ...args);
+  });
 };

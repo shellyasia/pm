@@ -7,7 +7,7 @@ export interface UserTable {
   email: ColumnType<string, string | undefined, never>; //primary key and unique
   name: ColumnType<string, string | undefined, never>;
   role: ColumnType<Role, Role | undefined, never>;
-  company: ColumnType<string | string, string | undefined, never>; //index
+  company: ColumnType<string | string, string | undefined, never>; //index, related to orders.factory
   created_at: ColumnType<Date, Date | undefined, never>;
   updated_at: ColumnType<Date, Date | undefined, never>;
 }
@@ -41,6 +41,13 @@ export async function dbUserFirstOrCreate(email: string): Promise<User> {
       created_at: now,
       updated_at: now,
     };
+    if (insert.email?.includes("@shelly.com")) {
+      insert.role = "viewer";
+      insert.company = "shelly";
+    }else{
+      insert.role = "viewer";
+      insert.company = "null";
+    }
     await db.insertInto(tableName).values(insert).execute();
     user = insert as User;
   }

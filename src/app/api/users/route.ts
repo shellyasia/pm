@@ -6,10 +6,10 @@ import {
   dbUserUpdate,
 } from "@/lib/db/table_user";
 import { db } from "@/lib/db/db";
-import { AuthenticatedRequest, withAnyRole, withAdminOnly } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withAnyRole, withAdminOnly, withShellyCompany } from "@/lib/auth/middleware";
 
 // GET /api/users - List users with pagination and search
-export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
+export const GET = withShellyCompany(withAnyRole(async (request: AuthenticatedRequest) => {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "10");
@@ -31,10 +31,10 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));
 
 // PUT /api/users - Update user by email in request body
-export const PUT = withAdminOnly(async (request: AuthenticatedRequest) => {
+export const PUT = withShellyCompany(withAdminOnly(async (request: AuthenticatedRequest) => {
   try {
     const body = await request.json();
     const { email, ...updateData } = body;
@@ -64,10 +64,10 @@ export const PUT = withAdminOnly(async (request: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));
 
 // POST /api/users - Create new user
-export const POST = withAdminOnly(async (request: AuthenticatedRequest) => {
+export const POST = withShellyCompany(withAdminOnly(async (request: AuthenticatedRequest) => {
   try {
     const body = await request.json();
     const { email, name, role = "viewer", company = "null" } =
@@ -101,10 +101,10 @@ export const POST = withAdminOnly(async (request: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));
 
 // DELETE /api/users - Delete user by email in request body
-export const DELETE = withAdminOnly(async (request: AuthenticatedRequest) => {
+export const DELETE = withShellyCompany(withAdminOnly(async (request: AuthenticatedRequest) => {
   try {
     const body = await request.json();
     const { email } = body;
@@ -140,4 +140,4 @@ export const DELETE = withAdminOnly(async (request: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));

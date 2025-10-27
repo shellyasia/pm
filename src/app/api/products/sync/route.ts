@@ -13,11 +13,11 @@ import {
   dbAttachmentAll,
   dbAttachmentUpsert,
 } from "@/lib/db/table_attachment";
-import { AuthenticatedRequest, withAdminOnly, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withAdminOnly, withShellyCompany } from "@/lib/auth/middleware";
 
 export const dynamic = "force-dynamic";
 
-export const PUT = withAdminOnly(async (_: AuthenticatedRequest) => {
+export const PUT = withShellyCompany(withAdminOnly(async (_: AuthenticatedRequest) => {
   const apiToken = config.CONFLUENCE_API_TOKEN;
   const userEmail = config.CONFLUENCE_USER_EMAIL;
   const baseUrl = config.CONFLUENCE_BASE_URL;
@@ -49,7 +49,7 @@ export const PUT = withAdminOnly(async (_: AuthenticatedRequest) => {
   //trigger background load of attachments
   backgroundLoadAttachments().catch(console.error);
   return NextResponse.json({ data });
-});
+}));
 
 async function syncAttachments(products: ProductInsert[]) {
   for (const product of products) {

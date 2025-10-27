@@ -1,24 +1,13 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import fs from "fs/promises";
 import path from "path";
-import { verifyToken } from "@/lib/auth/jwt";
+import { AuthenticatedRequest, withAdminOnly, withShellyCompany } from "@/lib/auth/middleware";
 
-export async function GET(
-  request: NextRequest,
+export const GET = withShellyCompany(withAdminOnly(async (
+  request: AuthenticatedRequest,
   { params }: { params: { filename: string } }
-) {
+) => {
   try {
-    // Verify admin authentication
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const payload = verifyToken(token);
-    if (!payload || payload.role !== "admin") {
-      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-    }
-
     const { filename } = params;
     const searchParams = request.nextUrl.searchParams;
     const lines = parseInt(searchParams.get("lines") || "100");
@@ -71,4 +60,4 @@ export async function GET(
       { status: 500 }
     );
   }
-}
+}));

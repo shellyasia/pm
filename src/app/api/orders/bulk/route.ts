@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthenticatedRequest, withEditorOrAdmin } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withShellyCompany } from "@/lib/auth/middleware";
 import { OrderInsert, orderInsert } from "@/lib/db/table_order";
 import { dbProductAll } from "@/lib/db/table_product";
 
@@ -14,7 +14,7 @@ interface BulkOrderRequest {
 }
 
 // POST /api/orders/bulk - Create multiple orders from Excel import
-export const POST = withEditorOrAdmin(async (req: AuthenticatedRequest) => {
+export const POST = withShellyCompany(withEditorOrAdmin(async (req: AuthenticatedRequest) => {
   try {
     const { orders }: { orders: BulkOrderRequest[] } = await req.json();
 
@@ -167,4 +167,4 @@ export const POST = withEditorOrAdmin(async (req: AuthenticatedRequest) => {
       { status: 500 },
     );
   }
-});
+}));

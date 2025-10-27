@@ -16,7 +16,7 @@ export interface OrderTable {
   id: Generated<string>;
   name: ColumnType<string, string | undefined, string | undefined>; //order name
   product_code: ColumnType<string, string | undefined, string | undefined>; //index to products.code
-  factory: ColumnType<string, string | undefined, string | undefined>; //lowercase
+  factory: ColumnType<string, string | undefined, string | undefined>; //lowercase related to users.company
   priority: ColumnType<string, string | undefined, string | undefined>; //lowercase
   quantity: ColumnType<number, number | undefined, number | undefined>;
   batch: ColumnType<string, string | undefined, string | undefined>;

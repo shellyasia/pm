@@ -5,7 +5,7 @@ import {
   dbProductUpdate,
   ProductUpdate,
 } from "@/lib/db/table_product";
-import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole, withShellyCompany } from "@/lib/auth/middleware";
 
 interface RouteParams {
   params: {
@@ -14,7 +14,7 @@ interface RouteParams {
 }
 
 // GET /api/products/[id] - Get product details
-export const GET = withAnyRole(async (req: AuthenticatedRequest, { params }: RouteParams) => {
+export const GET = withShellyCompany(withAnyRole(async (req: AuthenticatedRequest, { params }: RouteParams) => {
   try {
     const { id } = params;
     const product = await dbProductFirst(id);
@@ -26,10 +26,10 @@ export const GET = withAnyRole(async (req: AuthenticatedRequest, { params }: Rou
       { status: 404 },
     );
   }
-});
+}));
 
 // PUT /api/products/[id] - Update product
-export const PUT = withEditorOrAdmin(
+export const PUT = withShellyCompany(withEditorOrAdmin(
   async (req: AuthenticatedRequest, { params }: RouteParams) => {
     try {
       const { id } = params;
@@ -53,10 +53,10 @@ export const PUT = withEditorOrAdmin(
       );
     }
   },
-);
+));
 
 // DELETE /api/products/[id] - Delete product
-export const DELETE = withEditorOrAdmin(
+export const DELETE = withShellyCompany(withEditorOrAdmin(
   async (req: AuthenticatedRequest, { params }: RouteParams) => {
     try {
       const { id } = params;
@@ -89,4 +89,4 @@ export const DELETE = withEditorOrAdmin(
       );
     }
   },
-);
+));
