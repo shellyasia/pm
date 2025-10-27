@@ -30,6 +30,11 @@ export default function Home() {
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
           </Link>
+          <Link href="/orders">
+            <Button variant="outline" size="lg" className="px-8">
+              View Orders
+            </Button>
+          </Link>
           <Link href="/login">
             <Button variant="outline" size="lg" className="px-8">
               Sign In
