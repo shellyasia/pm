@@ -6,7 +6,9 @@ export const optionsFactory: string[] = [
   "smatek",
   "ogemray",
   "shelly",
+  'null',// null/blank factory
 ].map((f) => f.toLowerCase());
+
 export const optionsPriority: string[] = ["urgent", "high", "normal", "low"]
   .map((p) => p.toLowerCase());
 

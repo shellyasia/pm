@@ -156,8 +156,12 @@ export function DataTable<
       try {
         setLoading(true);
         const response = await fetch(`${props.fetchURL}?${params.toString()}`);
+        if (response.status === 401) {
+          const {error} = await response.json();
+          throw new Error("Unauthorized: " + error);
+        }
         if (!response.ok) {
-          throw new Error("Failed to load attachments: " + response.statusText);
+          throw new Error("Failed to load: " + response.statusText);
         }
         const responseData = await response.json();
 
@@ -175,7 +179,7 @@ export function DataTable<
       } catch (error) {
         console.error("Failed to fetch data:", error);
         toast.error(
-          `Failed to fetch data: ${
+          `${
             error instanceof Error ? error.message : "Unknown error"
           }`,
         );

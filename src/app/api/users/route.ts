@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import {
-  userAll,
+  dbUserAll,
   UserInsert,
   UserUpdate,
-  userUpdate,
+  dbUserUpdate,
 } from "@/lib/db/table_user";
 import { db } from "@/lib/db/db";
 import { AuthenticatedRequest, withAnyRole, withAdminOnly } from "@/lib/auth/middleware";
@@ -16,7 +16,7 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
   const search = searchParams.get("search") || "";
 
   try {
-    const { total, rows } = await userAll(search, page, limit);
+    const { total, rows } = await dbUserAll(search, page, limit);
 
     return NextResponse.json({
       page,
@@ -56,7 +56,7 @@ export const PUT = withAdminOnly(async (request: AuthenticatedRequest) => {
       updated_at: new Date(),
     };
 
-    const updatedUser = await userUpdate(email, update);
+    const updatedUser = await dbUserUpdate(email, update);
 
     return NextResponse.json(updatedUser);
   } catch (error) {

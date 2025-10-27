@@ -16,6 +16,9 @@ export const withAuth = <T extends unknown[]>(
     try {
       const token = req.cookies.get("token")?.value || "";
       const user = verifyToken(token);
+      if (user.company.toLowerCase() === "null") {
+        throw new Error("User company is not set,Ask the website admin to set the write access");
+      }
       // Add user to request object
       const authenticatedReq = req as AuthenticatedRequest;
       authenticatedReq.user = user;

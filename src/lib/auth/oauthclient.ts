@@ -4,7 +4,7 @@ import {
   oauthStateExist,
   oauthStateRemove,
 } from "../db/table_ouath_state";
-import { userFirstOrCreate } from "../db/table_user";
+import { dbUserFirstOrCreate } from "../db/table_user";
 import { generateToken } from "./jwt";
 
 export class OAuthClient {
@@ -71,7 +71,7 @@ export class OAuthClient {
     if (!email) {
       throw new Error("Email not found in user info");
     }
-    const user = await userFirstOrCreate(email);
+    const user = await dbUserFirstOrCreate(email);
     if (!user) {
       throw new Error("User not found or cannot be created");
     }

@@ -18,7 +18,7 @@ export type UserUpdate = Updateable<UserTable>;
 
 const tableName = "users";
 
-export async function userFirst(email: string) {
+export async function dbUserFirst(email: string) {
   return await db
     .selectFrom(tableName)
     .where("email", "=", email)
@@ -26,7 +26,7 @@ export async function userFirst(email: string) {
     .executeTakeFirstOrThrow();
 }
 
-export async function userFirstOrCreate(email: string): Promise<User> {
+export async function dbUserFirstOrCreate(email: string): Promise<User> {
   let user = await db
     .selectFrom(tableName)
     .where("email", "=", email)
@@ -38,7 +38,7 @@ export async function userFirstOrCreate(email: string): Promise<User> {
       email,
       name: email.split("@")[0],
       role: "viewer",
-      company: "shelly",
+      company: "null",
       is_active: true,
       created_at: now,
       updated_at: now,
@@ -46,13 +46,10 @@ export async function userFirstOrCreate(email: string): Promise<User> {
     await db.insertInto(tableName).values(insert).execute();
     user = insert as User;
   }
-  // if (user && user.is_active === false) {
-  //   throw new Error('User is inactive');
-  // }
   return user;
 }
 
-export async function userUpdate(email: string, update: UserUpdate) {
+export async function dbUserUpdate(email: string, update: UserUpdate) {
   return await db
     .updateTable(tableName)
     .set(update)
@@ -61,7 +58,7 @@ export async function userUpdate(email: string, update: UserUpdate) {
     .executeTakeFirstOrThrow();
 }
 
-export async function userAll(search: string = "", page = 1, limit = 60) {
+export async function dbUserAll(search: string = "", page = 1, limit = 60) {
   let q = db.selectFrom(tableName);
   if (search) {
     q = q.where((eb) =>
