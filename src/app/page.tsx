@@ -20,7 +20,7 @@ export default function Home() {
     <main>
       <Hero
         subtitle="IoT Management Platform"
-        title="Comprehensive Product Management System"
+        title="Product Management System"
         description="Enterprise-grade admin panel for managing IoT products, orders, and user accounts. Built with Next.js 14, TypeScript, and PostgreSQL for maximum performance and reliability."
       >
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-16">

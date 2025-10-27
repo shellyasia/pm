@@ -28,6 +28,7 @@ import {
     Factory,
     FileText,
     Filter,
+    LogOut,
     Package,
     Search,
 } from "lucide-react";
@@ -71,7 +72,7 @@ function OrdersPageContent() {
     const [expandedOrders, setExpandedOrders] = useState<Set<string>>(
         new Set(),
     );
-    const limit = 20;
+    const limit = 200;
 
     // Check if user's company matches allowed factories
     useEffect(() => {
@@ -186,6 +187,18 @@ function OrdersPageContent() {
         window.open(`/api/attachments/download/${attachment.hash}`, "_blank");
     };
 
+    const handleLogout = async () => {
+        try {
+            await fetch("/api/auth/logout", {
+                method: "GET",
+                credentials: "include",
+            });
+            router.push("/login");
+        } catch (error) {
+            console.error("Logout failed:", error);
+        }
+    };
+
     if (!user) {
         return null;
     }
@@ -239,6 +252,15 @@ function OrdersPageContent() {
                                     </div>
                                 </div>
                             </div>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={handleLogout}
+                                className="w-full mt-4"
+                            >
+                                <LogOut className="h-4 w-4 mr-2" />
+                                Logout
+                            </Button>
                         </CardContent>
                     </Card>
                 </div>
@@ -380,9 +402,9 @@ function OrdersPageContent() {
                                                         {order.status}
                                                     </Badge>
                                                     <Badge
-                                                        className={getPriorityColor(
+                                                        className={`${getPriorityColor(
                                                             order.priority,
-                                                        )}
+                                                        )} font-medium shadow-sm`}
                                                         variant="outline"
                                                     >
                                                         {order.priority}
@@ -392,53 +414,63 @@ function OrdersPageContent() {
                                         </CardHeader>
 
                                         {isExpanded && (
-                                            <CardContent className="border-t">
-                                                <div className="space-y-6 pt-4">
-                                                    {/* Order Details */}
-                                                    <div>
-                                                        <h4 className="font-semibold mb-2">
+                                            <CardContent className="border-t bg-gradient-to-b from-muted/20 to-transparent">
+                                                <div className="space-y-6 pt-6">{/* Order Details */}
+                                                    <div className="bg-card rounded-lg p-4 border shadow-sm">
+                                                        <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
+                                                            <div className="h-1 w-1 rounded-full bg-primary"></div>
                                                             Order Details
                                                         </h4>
-                                                        <div className="grid grid-cols-2 gap-2 text-sm">
-                                                            <div>
-                                                                <span className="text-muted-foreground">
+                                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                                                            <div className="flex items-start gap-2">
+                                                                <span className="text-muted-foreground font-medium min-w-[80px]">
                                                                     Order ID:
-                                                                </span>{" "}
-                                                                <span className="font-mono">
+                                                                </span>
+                                                                <span className="font-mono text-xs bg-secondary/50 px-2 py-0.5 rounded">
                                                                     {order.id}
                                                                 </span>
                                                             </div>
-                                                            <div>
-                                                                <span className="text-muted-foreground">
+                                                            <div className="flex items-start gap-2">
+                                                                <span className="text-muted-foreground font-medium min-w-[80px]">
                                                                     Created:
-                                                                </span>{" "}
-                                                                {new Date(
-                                                                    order
-                                                                        .created_at,
-                                                                ).toLocaleDateString()}
+                                                                </span>
+                                                                <span>
+                                                                    {new Date(
+                                                                        order.created_at,
+                                                                    ).toLocaleDateString('en-US', {
+                                                                        year: 'numeric',
+                                                                        month: 'long',
+                                                                        day: 'numeric'
+                                                                    })}
+                                                                </span>
                                                             </div>
                                                             {order.remark && (
-                                                                <div className="col-span-2">
-                                                                    <span className="text-muted-foreground">
+                                                                <div className="col-span-full flex items-start gap-2 bg-amber-50 dark:bg-amber-950/20 p-3 rounded-md border border-amber-200 dark:border-amber-900">
+                                                                    <span className="text-muted-foreground font-medium">
                                                                         Remark:
-                                                                    </span>{" "}
-                                                                    {order
-                                                                        .remark}
+                                                                    </span>
+                                                                    <span className="flex-1">
+                                                                        {order.remark}
+                                                                    </span>
                                                                 </div>
                                                             )}
                                                         </div>
                                                     </div>
 
                                                     {/* Attachments */}
-                                                    <div>
-                                                        <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                                            <FileText className="h-4 w-4" />
+                                                    <div className="bg-card rounded-lg p-4 border shadow-sm">
+                                                        <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
+                                                            <FileText className="h-4 w-4 text-primary" />
                                                             Attachments
                                                             {order.attachments &&
                                                                 order.attachments
                                                                     .length >
                                                                     0 &&
-                                                                ` (${order.attachments.length})`}
+                                                                (
+                                                                    <Badge variant="secondary" className="ml-1">
+                                                                        {order.attachments.length}
+                                                                    </Badge>
+                                                                )}
                                                         </h4>
                                                         {order.attachments &&
                                                         order.attachments
@@ -453,38 +485,34 @@ function OrdersPageContent() {
                                                                             <div
                                                                                 key={attachment
                                                                                     .id}
-                                                                                className="flex items-center justify-between p-3 bg-muted/50 rounded-lg hover:bg-muted transition-colors"
+                                                                                className="flex items-center justify-between p-4 bg-gradient-to-r from-muted/50 to-muted/30 rounded-lg hover:from-muted hover:to-muted/50 transition-all duration-200 border border-transparent hover:border-primary/20 group"
                                                                             >
-                                                                                <div className="flex-1">
-                                                                                    <div className="font-medium text-sm">
+                                                                                <div className="flex-1 min-w-0">
+                                                                                    <div className="font-medium text-sm mb-1 truncate group-hover:text-primary transition-colors">
                                                                                         {attachment
                                                                                             .name}
                                                                                     </div>
-                                                                                    <div className="text-xs text-muted-foreground flex flex-wrap gap-3">
-                                                                                        <span>
-                                                                                            Size: {formatFileSize(
+                                                                                    <div className="text-xs text-muted-foreground flex flex-wrap gap-2">
+                                                                                        <span className="bg-background/60 px-2 py-0.5 rounded">
+                                                                                            {formatFileSize(
                                                                                                 attachment
                                                                                                     .size,
                                                                                             )}
                                                                                         </span>
-                                                                                        <span>
-                                                                                            Type: {attachment
+                                                                                        <span className="bg-background/60 px-2 py-0.5 rounded">
+                                                                                            {attachment
                                                                                                 .mimetype}
                                                                                         </span>
-                                                                                        <span>
-                                                                                            Product: {attachment
+                                                                                        <span className="bg-background/60 px-2 py-0.5 rounded">
+                                                                                            {attachment
                                                                                                 .product_code}
-                                                                                        </span>
-                                                                                        <span className="font-mono text-xs">
-                                                                                            ID: {attachment
-                                                                                                .id}
                                                                                         </span>
                                                                                         {attachment
                                                                                             .tag &&
                                                                                             (
                                                                                                 <Badge
                                                                                                     variant="outline"
-                                                                                                    className="text-xs"
+                                                                                                    className="text-xs h-5"
                                                                                                 >
                                                                                                     {attachment
                                                                                                         .tag}
@@ -492,8 +520,8 @@ function OrdersPageContent() {
                                                                                             )}
                                                                                     </div>
                                                                                     {attachment.remark && (
-                                                                                        <div className="text-xs text-muted-foreground mt-1 italic">
-                                                                                            Note: {attachment.remark}
+                                                                                        <div className="text-xs text-muted-foreground mt-2 italic bg-background/40 px-2 py-1 rounded">
+                                                                                            💬 {attachment.remark}
                                                                                         </div>
                                                                                     )}
                                                                                 </div>
@@ -504,6 +532,7 @@ function OrdersPageContent() {
                                                                                         handleDownload(
                                                                                             attachment,
                                                                                         )}
+                                                                                    className="ml-3 hover:bg-primary hover:text-primary-foreground transition-all duration-200"
                                                                                 >
                                                                                     <Download className="h-4 w-4" />
                                                                                 </Button>
@@ -512,8 +541,8 @@ function OrdersPageContent() {
                                                                 </div>
                                                             )
                                                             : (
-                                                                <div className="p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                                                                    <p className="text-sm text-yellow-800 flex items-center gap-2">
+                                                                <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-900 rounded-lg">
+                                                                    <p className="text-sm text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
                                                                         <FileText className="h-4 w-4" />
                                                                         No attachments available for this order
                                                                     </p>
@@ -530,32 +559,42 @@ function OrdersPageContent() {
 
                         {/* Pagination */}
                         {total > limit && (
-                            <div className="flex items-center justify-between">
-                                <div className="text-sm text-muted-foreground">
-                                    Showing {(page - 1) * limit + 1} to{" "}
-                                    {Math.min(page * limit, total)} of {total}
-                                    {" "}
-                                    orders
-                                </div>
-                                <div className="flex gap-2">
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        disabled={page === 1}
-                                        onClick={() => setPage(page - 1)}
-                                    >
-                                        Previous
-                                    </Button>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        disabled={page * limit >= total}
-                                        onClick={() => setPage(page + 1)}
-                                    >
-                                        Next
-                                    </Button>
-                                </div>
-                            </div>
+                            <Card className="shadow-md">
+                                <CardContent className="py-4">
+                                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                        <div className="text-sm text-muted-foreground">
+                                            Showing <span className="font-semibold text-foreground">{(page - 1) * limit + 1}</span> to{" "}
+                                            <span className="font-semibold text-foreground">{Math.min(page * limit, total)}</span> of{" "}
+                                            <span className="font-semibold text-foreground">{total}</span> orders
+                                        </div>
+                                        <div className="flex gap-2">
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                disabled={page === 1}
+                                                onClick={() => setPage(page - 1)}
+                                                className="transition-all duration-200 disabled:opacity-50"
+                                            >
+                                                Previous
+                                            </Button>
+                                            <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-md">
+                                                <span className="text-sm font-medium">
+                                                    Page {page} of {Math.ceil(total / limit)}
+                                                </span>
+                                            </div>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                disabled={page * limit >= total}
+                                                onClick={() => setPage(page + 1)}
+                                                className="transition-all duration-200 disabled:opacity-50"
+                                            >
+                                                Next
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </CardContent>
+                            </Card>
                         )}
                     </>
                 )}
