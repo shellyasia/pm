@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import { User } from "@/lib/db/table_user";
+import { toast } from "sonner";
 
 export default function UsersPage() {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -35,7 +36,8 @@ export default function UsersPage() {
       });
 
       if (!response.ok) {
-        throw new Error(`Failed to ${action} user: ${response.statusText}`);
+        const { error } = await response.json();
+        throw new Error(`Failed to ${action} user: ${error || response.statusText}`);
       }
 
       const savedUser = await response.json();
@@ -45,7 +47,10 @@ export default function UsersPage() {
 
       return savedUser;
     } catch (error) {
-      throw error;
+      console.error("Error saving user:", error);
+      toast.error(`Error saving user: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`);
     }
   };
 
