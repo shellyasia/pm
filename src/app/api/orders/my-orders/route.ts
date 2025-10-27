@@ -44,9 +44,8 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
     
     const total = countResult?.count || 0;
 
-    // Get paginated results with product joins
+    // Get paginated results - only order data
     const rows = await q
-      .leftJoin("products", "products.code", "orders.product_code")
       .select([
         "orders.id",
         "orders.name",
@@ -60,10 +59,6 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
         "orders.created_at",
         "orders.updated_at",
         "orders.comments",
-        "products.id as product_id",
-        "products.code as product_code_full",
-        "products.firmware",
-        "products.html as product_html",
       ])
       .orderBy("orders.created_at", "desc")
       .offset((page - 1) * limit)
@@ -79,7 +74,6 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
         .selectFrom("attachments")
         .selectAll()
         .where("product_code", "in", productCodes)
-        .where("status", "=", "active")
         .execute();
       
       // Group by product_code
@@ -91,19 +85,11 @@ export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
       }
     }
 
-    // Process results
+    // Process results - only order data with attachments
     const processedRows = rows.map(row => {
-      const { product_id, product_code_full, product_html, firmware, ...orderData } = row;
-      
       return {
-        ...orderData,
-        product: product_id ? {
-          id: product_id,
-          code: product_code_full,
-          firmware,
-          html: product_html,
-        } : null,
-        attachments: attachmentsMap[orderData.product_code] || [],
+        ...row,
+        attachments: attachmentsMap[row.product_code] || [],
       };
     });
 
