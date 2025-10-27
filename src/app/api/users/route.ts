@@ -51,8 +51,6 @@ export const PUT = withAdminOnly(async (request: AuthenticatedRequest) => {
       ...(updateData.name !== undefined && { name: updateData.name }),
       ...(updateData.role !== undefined && { role: updateData.role }),
       ...(updateData.company !== undefined && { company: updateData.company }),
-      ...(updateData.is_active !== undefined &&
-        { is_active: updateData.is_active }),
       updated_at: new Date(),
     };
 
@@ -72,7 +70,7 @@ export const PUT = withAdminOnly(async (request: AuthenticatedRequest) => {
 export const POST = withAdminOnly(async (request: AuthenticatedRequest) => {
   try {
     const body = await request.json();
-    const { email, name, role = "viewer", company = "", is_active = true } =
+    const { email, name, role = "viewer", company = "null" } =
       body;
 
     if (!email) {
@@ -88,7 +86,6 @@ export const POST = withAdminOnly(async (request: AuthenticatedRequest) => {
       name: name || email.split("@")[0],
       role,
       company,
-      is_active,
       created_at: now,
       updated_at: now,
     };

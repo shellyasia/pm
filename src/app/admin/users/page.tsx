@@ -127,21 +127,7 @@ export default function UsersPage() {
         </span>
       ),
     },
-    {
-      key: "is_active",
-      title: "Status",
-      sortable: true,
-      render: (value: unknown) => (
-        <Badge
-          variant="outline"
-          className={value
-            ? "bg-green-100 text-green-800 border-green-200"
-            : "bg-red-100 text-red-800 border-red-200"}
-        >
-          {value ? "Active" : "Inactive"}
-        </Badge>
-      ),
-    },
+
     {
       key: "created_at",
       title: "Created",

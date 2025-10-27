@@ -8,7 +8,6 @@ export interface UserTable {
   name: ColumnType<string, string | undefined, never>;
   role: ColumnType<Role, Role | undefined, never>;
   company: ColumnType<string | string, string | undefined, never>; //index
-  is_active: ColumnType<boolean, boolean | undefined, never>; //default true
   created_at: ColumnType<Date, Date | undefined, never>;
   updated_at: ColumnType<Date, Date | undefined, never>;
 }
@@ -39,7 +38,6 @@ export async function dbUserFirstOrCreate(email: string): Promise<User> {
       name: email.split("@")[0],
       role: "viewer",
       company: "null",
-      is_active: true,
       created_at: now,
       updated_at: now,
     };

@@ -7,7 +7,6 @@ export async function up(db: Kysely<unknown>): Promise<void> {
     .addColumn("name", "varchar", (col) => col.notNull().defaultTo(""))
     .addColumn("role", "varchar", (col) => col.notNull().defaultTo("viewer")) //Role: admin, editor, viewer
     .addColumn("company", "varchar", (col) => col.notNull().defaultTo("normal")) //Factory: normal, factory1, factory2
-    .addColumn("is_active", "boolean", (col) => col.notNull().defaultTo(true)) //default true
     .addColumn(
       "created_at",
       "timestamp",

@@ -40,7 +40,6 @@ const EditUserDialog: React.FC<EditUserDialogProps> = (
         email: initialData.email || "",
         role: initialData.role || "viewer",
         company: initialData.company || "",
-        is_active: initialData.is_active ?? true,
       });
     }
   }, [initialData]);
@@ -135,15 +134,7 @@ const EditUserDialog: React.FC<EditUserDialogProps> = (
                 ))}
               </SelectContent>
             </Select>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                name="is_active"
-                checked={!!form.is_active}
-                onChange={handleChange}
-              />
-              Active
-            </label>
+
             <DialogFooter>
               <Button
                 type="button"
