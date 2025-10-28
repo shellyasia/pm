@@ -16,7 +16,8 @@
     "security:scan": "npm audit --audit-level=moderate",
     "restart:prod": "pm2 restart pm.acme.cn",
     "pm2:dev": "next dev",
-    "pm2:restart": "next build && pm2 restart ecosystem.config.js --env production"
+    "pm2:restart": "next build && pm2 restart ecosystem.config.js --env production",
+    "deploy": "./deploy.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
