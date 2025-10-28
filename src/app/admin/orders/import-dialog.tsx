@@ -264,16 +264,24 @@ export function ExcelImportDialog(
   };
 
   const handleImport = async () => {
-    const validOrders = parsedData.filter((order) => order.isValid);
+    // Check if there are any invalid rows - if so, block the entire import
+    const invalidOrders = parsedData.filter((order) => !order.isValid);
+    
+    if (invalidOrders.length > 0) {
+      setErrors([
+        `Cannot import: ${invalidOrders.length} row(s) contain errors. Please fix all errors before importing.`
+      ]);
+      return;
+    }
 
-    if (validOrders.length === 0) {
-      setErrors(["No valid orders to import"]);
+    if (parsedData.length === 0) {
+      setErrors(["No orders to import"]);
       return;
     }
 
     setIsImporting(true);
     try {
-      await onImport(validOrders);
+      await onImport(parsedData);
       handleClose();
     } catch (error) {
       setErrors([
@@ -481,7 +489,7 @@ export function ExcelImportDialog(
           </Button>
           <Button
             onClick={handleImport}
-            disabled={!file || validCount === 0 || isImporting}
+            disabled={!file || parsedData.length === 0 || invalidCount > 0 || isImporting}
             className="flex items-center gap-2"
           >
             {isImporting && <Upload className="h-4 w-4 animate-pulse" />}
