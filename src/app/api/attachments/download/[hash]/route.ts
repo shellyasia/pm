@@ -47,9 +47,8 @@ export const GET = withAnyRole(async (
       fileBuffer = await readFile(filePath);
     }
     // Only update the download_count field, not the entire object
-    await dbAttachmentUpdate(attachment.id, {
-      download_count: attachment.download_count + 1,
-    });
+    attachment.download_count += 1;
+    await dbAttachmentUpdate(attachment.id, attachment);
 
     // Return file with proper headers
     return new NextResponse(new Uint8Array(fileBuffer), {

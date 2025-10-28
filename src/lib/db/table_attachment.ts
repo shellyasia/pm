@@ -12,15 +12,15 @@ import { ColComment } from "./types";
 export interface AttachmentTable {
   id: Generated<number>; //auto incrementing primary key
   product_code: ColumnType<string, string | undefined, never>; //index to products.code
-  hash: ColumnType<string, string | undefined, never>; //sha256 hash of the file - cannot be updated
+  hash: ColumnType<string, string | undefined, string | undefined>; //sha256 hash of the file - cannot be updated
   name: ColumnType<string, string | undefined, string | undefined>; //attachment name, not unique
-  size: ColumnType<number, number | undefined, never>; //file size in bytes - cannot be updated
-  mimetype: ColumnType<string, string | undefined, never>; //file mime type - cannot be updated
+  size: ColumnType<number, number | undefined, string | undefined>; //file size in bytes - cannot be updated
+  mimetype: ColumnType<string, string | undefined, string | undefined>; //file mime type - cannot be updated
   status: ColumnType<string, string | undefined, string | undefined>; //approved rejected deleted inactive active draft
   download_count: ColumnType<number, number | undefined, number | undefined>; //download count
   remark: ColumnType<string, string | undefined, string | undefined>; //optional remark
   tag: ColumnType<string, string | undefined, string | undefined>; //only one tag per attachment, e.g. "manual","testing", "firmware", "printing", "certificate"
-  comments: ColumnType<ColComment[], ColComment[] | undefined, never>; //array of {email, content, created_at, action}
+  comments: ColumnType<ColComment[], ColComment[] | undefined, ColComment[] | undefined>; //array of {email, content, created_at, action}
   created_at: ColumnType<Date, Date | undefined, never>;
   updated_at: ColumnType<Date, Date | undefined, Date>;
 }
