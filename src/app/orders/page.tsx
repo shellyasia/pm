@@ -402,9 +402,11 @@ function OrdersPageContent() {
                                                         {order.status}
                                                     </Badge>
                                                     <Badge
-                                                        className={`${getPriorityColor(
-                                                            order.priority,
-                                                        )} font-medium shadow-sm`}
+                                                        className={`${
+                                                            getPriorityColor(
+                                                                order.priority,
+                                                            )
+                                                        } font-medium shadow-sm`}
                                                         variant="outline"
                                                     >
                                                         {order.priority}
@@ -415,10 +417,12 @@ function OrdersPageContent() {
 
                                         {isExpanded && (
                                             <CardContent className="border-t bg-gradient-to-b from-muted/20 to-transparent">
-                                                <div className="space-y-6 pt-6">{/* Order Details */}
+                                                <div className="space-y-6 pt-6">
+                                                    {/* Order Details */}
                                                     <div className="bg-card rounded-lg p-4 border shadow-sm">
                                                         <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
-                                                            <div className="h-1 w-1 rounded-full bg-primary"></div>
+                                                            <div className="h-1 w-1 rounded-full bg-primary">
+                                                            </div>
                                                             Order Details
                                                         </h4>
                                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
@@ -436,12 +440,18 @@ function OrdersPageContent() {
                                                                 </span>
                                                                 <span>
                                                                     {new Date(
-                                                                        order.created_at,
-                                                                    ).toLocaleDateString('en-US', {
-                                                                        year: 'numeric',
-                                                                        month: 'long',
-                                                                        day: 'numeric'
-                                                                    })}
+                                                                        order
+                                                                            .created_at,
+                                                                    ).toLocaleDateString(
+                                                                        "en-US",
+                                                                        {
+                                                                            year:
+                                                                                "numeric",
+                                                                            month:
+                                                                                "long",
+                                                                            day: "numeric",
+                                                                        },
+                                                                    )}
                                                                 </span>
                                                             </div>
                                                             {order.remark && (
@@ -450,7 +460,8 @@ function OrdersPageContent() {
                                                                         Remark:
                                                                     </span>
                                                                     <span className="flex-1">
-                                                                        {order.remark}
+                                                                        {order
+                                                                            .remark}
                                                                     </span>
                                                                 </div>
                                                             )}
@@ -462,19 +473,28 @@ function OrdersPageContent() {
                                                         <h4 className="font-semibold mb-3 text-base flex items-center gap-2">
                                                             <FileText className="h-4 w-4 text-primary" />
                                                             Attachments
-                                                            {order.attachments &&
-                                                                order.attachments
-                                                                    .length >
+                                                            {order
+                                                                .attachments &&
+                                                                order
+                                                                        .attachments
+                                                                        .length >
                                                                     0 &&
                                                                 (
-                                                                    <Badge variant="secondary" className="ml-1">
-                                                                        {order.attachments.length}
+                                                                    <Badge
+                                                                        variant="secondary"
+                                                                        className="ml-1"
+                                                                    >
+                                                                        {order
+                                                                            .attachments
+                                                                            .length}
                                                                     </Badge>
                                                                 )}
                                                         </h4>
                                                         {order.attachments &&
-                                                        order.attachments
-                                                                .length > 0
+                                                                order
+                                                                        .attachments
+                                                                        .length >
+                                                                    0
                                                             ? (
                                                                 <div className="space-y-2">
                                                                     {order
@@ -519,11 +539,16 @@ function OrdersPageContent() {
                                                                                                 </Badge>
                                                                                             )}
                                                                                     </div>
-                                                                                    {attachment.remark && (
-                                                                                        <div className="text-xs text-muted-foreground mt-2 italic bg-background/40 px-2 py-1 rounded">
-                                                                                            💬 {attachment.remark}
-                                                                                        </div>
-                                                                                    )}
+                                                                                    {attachment
+                                                                                        .remark &&
+                                                                                        (
+                                                                                            <div className="text-xs text-muted-foreground mt-2 italic bg-background/40 px-2 py-1 rounded">
+                                                                                                💬
+                                                                                                {" "}
+                                                                                                {attachment
+                                                                                                    .remark}
+                                                                                            </div>
+                                                                                        )}
                                                                                 </div>
                                                                                 <Button
                                                                                     size="sm"
@@ -544,7 +569,11 @@ function OrdersPageContent() {
                                                                 <div className="p-4 bg-yellow-50 dark:bg-yellow-950/20 border border-yellow-200 dark:border-yellow-900 rounded-lg">
                                                                     <p className="text-sm text-yellow-800 dark:text-yellow-200 flex items-center gap-2">
                                                                         <FileText className="h-4 w-4" />
-                                                                        No attachments available for this order
+                                                                        No
+                                                                        attachments
+                                                                        available
+                                                                        for this
+                                                                        order
                                                                     </p>
                                                                 </div>
                                                             )}
@@ -563,30 +592,43 @@ function OrdersPageContent() {
                                 <CardContent className="py-4">
                                     <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
                                         <div className="text-sm text-muted-foreground">
-                                            Showing <span className="font-semibold text-foreground">{(page - 1) * limit + 1}</span> to{" "}
-                                            <span className="font-semibold text-foreground">{Math.min(page * limit, total)}</span> of{" "}
-                                            <span className="font-semibold text-foreground">{total}</span> orders
+                                            Showing{" "}
+                                            <span className="font-semibold text-foreground">
+                                                {(page - 1) * limit + 1}
+                                            </span>{" "}
+                                            to{" "}
+                                            <span className="font-semibold text-foreground">
+                                                {Math.min(page * limit, total)}
+                                            </span>{" "}
+                                            of{" "}
+                                            <span className="font-semibold text-foreground">
+                                                {total}
+                                            </span>{" "}
+                                            orders
                                         </div>
                                         <div className="flex gap-2">
                                             <Button
                                                 variant="outline"
                                                 size="sm"
                                                 disabled={page === 1}
-                                                onClick={() => setPage(page - 1)}
+                                                onClick={() =>
+                                                    setPage(page - 1)}
                                                 className="transition-all duration-200 disabled:opacity-50"
                                             >
                                                 Previous
                                             </Button>
                                             <div className="flex items-center gap-2 px-3 py-1 bg-primary/10 rounded-md">
                                                 <span className="text-sm font-medium">
-                                                    Page {page} of {Math.ceil(total / limit)}
+                                                    Page {page} of{" "}
+                                                    {Math.ceil(total / limit)}
                                                 </span>
                                             </div>
                                             <Button
                                                 variant="outline"
                                                 size="sm"
                                                 disabled={page * limit >= total}
-                                                onClick={() => setPage(page + 1)}
+                                                onClick={() =>
+                                                    setPage(page + 1)}
                                                 className="transition-all duration-200 disabled:opacity-50"
                                             >
                                                 Next

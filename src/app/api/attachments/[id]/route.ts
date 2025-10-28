@@ -2,13 +2,13 @@ import { NextResponse } from "next/server";
 import { dbAttachmentFirst } from "@/lib/db/table_attachment";
 import { db } from "@/lib/db/db";
 import { sql } from "kysely";
-import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withShellyCompany } from "@/lib/auth/middleware";
 import { optionsTag, optionsStatus } from "@/lib/config/const";
 
 export const dynamic = "force-dynamic";
 
 // GET /api/attachments/[id] - attachment details
-export const GET = withAnyRole(async (
+export const GET = withShellyCompany(async (
   request: AuthenticatedRequest,
   { params }: { params: { id: string } },
 ) => {

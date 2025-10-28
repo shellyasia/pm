@@ -11,7 +11,7 @@ import { AuthenticatedRequest, withAnyRole } from "@/lib/auth/middleware";
 export const dynamic = "force-dynamic";
 
 // GET /api/attachments/download/[hash] - Download attachment by hash
-export const GET = async (
+export const GET = withAnyRole(async (
   _: AuthenticatedRequest,
   { params }: { params: { hash: string } },
 ) => {
@@ -67,4 +67,4 @@ export const GET = async (
       { status: 404 },
     );
   }
-}
+});

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { AuthenticatedRequest, withEditorOrAdmin, withAnyRole } from "@/lib/auth/middleware";
+import { AuthenticatedRequest, withEditorOrAdmin, withShellyCompany } from "@/lib/auth/middleware";
 import {
   AttachmentInsert,
   dbAttachmentAll,
@@ -8,11 +8,11 @@ import {
 import { mkdir, writeFile } from "fs/promises";
 import { join } from "path";
 import { createHash } from "crypto";
-import { config, uploadDir } from "@/lib/config/envs";
+import {  uploadDir } from "@/lib/config/envs";
 import { optionsTag } from "@/lib/config/const";
 
 // GET /api/attachments - List attachments with pagination and search
-export const GET = withAnyRole(async (request: AuthenticatedRequest) => {
+export const GET = withShellyCompany(async (request: AuthenticatedRequest) => {
   const { searchParams } = new URL(request.url);
   const page = parseInt(searchParams.get("page") || "1");
   const limit = parseInt(searchParams.get("limit") || "100");
