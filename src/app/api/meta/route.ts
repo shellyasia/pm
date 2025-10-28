@@ -4,7 +4,9 @@ import { config } from "@/lib/config/envs";
 import { optionsStatus, optionsTag } from "@/lib/config/const";
 
 export async function GET() {
+
   return NextResponse.json({
+
     optionsPriority,
     optionsFactory,
     optionsTag,
